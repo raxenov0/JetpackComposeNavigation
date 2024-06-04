@@ -3,46 +3,44 @@ package com.iteco.iteco_navigation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.iteco.iteco_navigation.ui.theme.Iteco_navigationTheme
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.get
+import com.iteco.iteco_navigation.api.ws.AuthorizationViewModel
+import com.iteco.iteco_navigation.api.ws.WebSocketListener
+import com.iteco.iteco_navigation.navigation.Navigation
+import com.iteco.iteco_navigation.ui.theme.NavigationTheme
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.WebSocket
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var webSocketListener: WebSocketListener
+    private val okHttpClient = OkHttpClient()
+
+    private var webSocket: WebSocket? = null
+    private val viewModel: AuthorizationViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+
+        webSocketListener = WebSocketListener(viewModel)
+        webSocket = okHttpClient.newWebSocket(createRequest(), webSocketListener)
+
         setContent {
-            Iteco_navigationTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+            NavigationTheme {
+                Navigation(viewModel)
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Iteco_navigationTheme {
-        Greeting("Android")
+    private  fun createRequest():Request{
+        val webSocketUrl = "ws://192.168.5.184:8080/ws"
+        return  Request.Builder().url(webSocketUrl).build()
     }
 }
+

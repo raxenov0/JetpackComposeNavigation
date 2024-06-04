@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">ITECO.Навигатор</string>
+    <string name="auth_title">Авторизация</string>
+    <string name="auth_description">Отсканируйте QR-код из приложения ITECO.Водитель для активации навигатора</string>
+    <string name="auth_helpful">Где найти сканер?</string>
+    <string name="auth_with_app_title">Авторизация</string>
+    <string name="auth_2theme_title">Если ITECO.Водитель установлен на другом устройстве</string>
+    <string name="auth_1theme_title">Если ITECO.Водитель установлен на данном устройстве</string>
+
+    <string name="server_url" translatable="false">ws://95.165.142.155:8188/ws</string>
+    <string name="try_again">Повторить попытку</string>
+
+    <string name="server_error_title">Нет интернета</string>
+    <string name="server_error_description">Проверьте подключение к сети или перезагрузите приложение</string>
 </resources>
